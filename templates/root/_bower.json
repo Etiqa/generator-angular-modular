@@ -1,0 +1,22 @@
+{
+  "name": "<%= _.slugify(_.humanize(appName)) %>",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "~<%= ngVer %>",
+    "angular-mocks": "~<%= ngVer %>",
+    "json3": "~3.3.1",
+    "es5-shim": "~4.0.3" <% if (bootstrap) { %>,
+   "bootstrap": "~3.2.0"<% } %><% if (resourceModule) { %>,
+    "angular-resource": "~<%= ngVer %>"<% } %><% if (cookiesModule) { %>,
+    "angular-cookie": "*"<% } %><% if (sanitizeModule) { %>,
+    "angular-sanitize": "~<%= ngVer %>"<% } %><% if (animateModule) { %>,
+    "angular-animate": "~<%= ngVer %>"<% } %><% if (touchModule) { %>,
+    "angular-ui-router": "*"<% } %><% if (uiRouter) { %>,
+    "angular-touch": "~<%= ngVer %>"<% } %>
+    
+  },
+  "devDependencies": {
+    "angular-mocks": "~<%= ngVer %>",
+    "angular-scenario": "~<%= ngVer %>"
+  }
+}
