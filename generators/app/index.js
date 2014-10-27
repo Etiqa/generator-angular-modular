@@ -48,7 +48,7 @@
             type: 'input',
             name: 'appName',
             message: 'What will be the app name ',
-            default: this.appName || 'modularNgApp'
+            default: this.appName || 'ngModularApp'
         }], function(props) {
             this.appName = props.appName;
             done();
