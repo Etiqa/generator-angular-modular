@@ -77,10 +77,19 @@ module.exports = function(grunt) {
          */
         vendor_files: {
             js: [
-            'vendor/**/*.js'
+                'vendor/jquery/dist/jquery.js',
+                'vendor/es5-shim/es5-shim.js',
+                'vendor/angular/angular.js',
+                'vendor/json3/lib/json3.js',
+                <% if(bootstrap){ %>'vendor/bootstrap/dist/js/bootstrap.js',<%} %>
+                <% if(resourceModule){ %>'vendor/angular-resource/angular-resource.js',<%} %>
+                <% if(cookiesModule){ %>'vendor/angular-cookie/angular-cookie.js',<%} %>
+                <% if(sanitizeModule){ %>'vendor/angular-sanitize/angular-sanitize.js',<%} %>
+                <% if(animateModule){ %>'vendor/angular-animate/angular-animate.js',<%} %>
+                <% if(uiRouter){ %>'vendor/angular-ui-router/release/angular-ui-router.js',<%} %>
+                <% if(touchModule){ %>'vendor/angular-touch/angular-touch.js'<%} %>
             ],
             css: [
-            'vendor/**/*.css'
             ],
             assets: [
             ]
@@ -120,6 +129,20 @@ module.exports = function(grunt) {
          * 'build_dir', and then to copy the assets to 'compile_dir'.
          */
         copy: {
+            build_html :{
+                files: [
+                    {
+                        src: '<%%= build_dir %>/index.html',
+                        dest: '<%%= build_dir %>/index.html',
+                        cwd: '.',
+                        options: {
+                            process: function(content, srcpath) {
+                                return content.replace('<script src="vendor/angular-mocks/angular-mocks.js"></script>', '');
+                            },
+                        }
+                    }
+                ]
+            },
             build_app_assets: {
                 files: [
                     {
@@ -156,7 +179,7 @@ module.exports = function(grunt) {
                     {
                         src: [ '<%%= vendor_files.js %>' ],
                         dest: '<%%= build_dir %>/',
-                        cwd: '.',
+                        cwd: 'src/',
                         expand: true
                     }
                 ]
@@ -430,10 +453,6 @@ module.exports = function(grunt) {
             continuous: {
                 singleRun: true
             }
-            
-            
-            
-            
         },
 
         /**
@@ -482,13 +501,6 @@ module.exports = function(grunt) {
                 livereload: true
             },
 
-
-            karma: {
-                files: [
-                    '<%%= app_files.js %>'
-                ],
-                tasks: ['karma:unit:run']
-            },
             /**
              * When the Gruntfile changes, we just want to lint it. In fact, when
              * your Gruntfile changes, it will automatically be reloaded!
@@ -499,17 +511,6 @@ module.exports = function(grunt) {
                 options: {
                     livereload: false
                 }
-            },
-
-            /**
-             * When our JavaScript source files change, we want to run lint them and
-             * run our unit tests.
-             */
-            jssrc: {
-                files: [
-                    '<%%= app_files.js %>'
-                ],
-                tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs', 'index:build' ]
             },
 
             /**
@@ -602,21 +603,21 @@ module.exports = function(grunt) {
     // 'delta') and then add a new task called 'watch' that does a clean build
     // before watching for changes.
 
-
     grunt.registerTask('default',['dev','express','watch']);
-
-    // The default task is to build and compile.
     
-
     // The 'build' task gets your app ready to run for development and testing.
     grunt.registerTask('dev', [
-        'index:dev', 'less:dev','karmaconfig:dev', 'karma:continuous'
+        'index:dev', 'less:dev'
+    ]);
+
+    grunt.registerTask('test',[
+        'karmaconfig:dev', 'karma:continuous'
     ]);
 
     grunt.registerTask('build',[
         'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
         'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-        'copy:build_appjs', 'copy:build_vendorjs', 'ngAnnotate:build', 'index:build', 'karmaconfig', 'karma:continuous',
+        'copy:build_appjs', 'copy:build_vendorjs', 'ngAnnotate:build', 'index:build','copy:build_html', 'karmaconfig', 'karma:continuous',
     ]);
 
     // The 'compile' task gets your app ready for deployment by concatenating and minifying your code.

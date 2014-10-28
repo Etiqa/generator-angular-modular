@@ -19,8 +19,8 @@
 
         this.on('end', function () {
             this.installDependencies({ // At the end we install the dependencies
-              skipInstall: !!this.options['skip-install'],
-              skipMessage: !!this.options['skip-message'],
+              skipInstall: (typeof this.options['skip-install'] === 'undefined' || this.options['skip-install']) ? true : false,
+              skipMessage: (typeof this.options['skip-message'] === 'undefined' || this.options['skip-message']) ? true : false,
               npm : true,
               bower : true,
               callback: this._injectDependencies.bind(this)
@@ -120,7 +120,6 @@
 
             done();
         }.bind(this));
-
     };
 
     Generator.prototype.scaffoldingDirectories = function scaffoldingDirectories() {
@@ -137,10 +136,7 @@
     };
 
     Generator.prototype.generateIndexFile = function generateIndexFile() {
-        var context = {
-            appName: this.appName
-        };
-        this.template('app/index.html', 'src/index.src.html', context);
+        this.template('app/index.html', 'src/index.src.html');
     };
 
     Generator.prototype.generateGruntFile = function generateGruntFile(){
@@ -158,6 +154,16 @@
         this.template('app/app.spec.js', 'src/app/app.spec.js');
     };
 
+    Generator.prototype.generateHomeModule = function generateModules (argument) {
+      this.composeWith('angular-modular:module', {
+        options : {
+            'skip-prompt' : true,
+            uiRouter : true,
+            appName : this.appName,
+            name : 'home'
+        }
+      });
+    };
 
     /**
     *  Private method (it doesn't get called by the yeoman loop )
