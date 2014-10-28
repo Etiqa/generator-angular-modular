@@ -19,11 +19,14 @@
 
         this.on('end', function () {
             this.installDependencies({ // At the end we install the dependencies
-              skipInstall: (typeof this.options['skip-install'] === 'undefined' || this.options['skip-install']) ? true : false,
-              skipMessage: (typeof this.options['skip-message'] === 'undefined' || this.options['skip-message']) ? true : false,
-              npm : true,
-              bower : true,
-              callback: this._injectDependencies.bind(this)
+                skipInstall: !!this.options['skip-install'],
+                skipMessage: !!this.options['skip-message'],
+
+                //skipInstall: (typeof this.options['skip-install'] === 'undefined' || this.options['skip-install']) ? true : false,
+                //skipMessage: (typeof this.options['skip-message'] === 'undefined' || this.options['skip-message']) ? true : false,
+                npm : true,
+                bower : true,
+                callback: this._injectDependencies.bind(this)
             });
         });
     };
@@ -120,6 +123,7 @@
 
             done();
         }.bind(this));
+
     };
 
     Generator.prototype.scaffoldingDirectories = function scaffoldingDirectories() {

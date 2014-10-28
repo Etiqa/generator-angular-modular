@@ -432,7 +432,7 @@ module.exports = function(grunt) {
                     port: 9000,
                     hostname: 'localhost',
                     serverreload: false,
-                    bases: '<%%= dev_dir %>',
+                    bases: ['<%%= dev_dir %>','<%%= dev_dir %>/app'],
                     livereload: true
                 }
             }

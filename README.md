@@ -21,3 +21,8 @@ Getting started
 2. Using the terminal navigate to the new directory
 3. Run `yo angular-modular` to generate the new app
 4. You can run `yo angular-modular:module` to generate a new module inside the app
+
+
+###TODO
+- Dynamic module inclusion in app.js
+- Compile process
