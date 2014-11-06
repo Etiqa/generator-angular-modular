@@ -17,6 +17,7 @@
         init();
     }]);
 }(angular.module('<%= appName%>', [
+    //hookForModules - the module generator will automatically include the modules after this comment
     <% if(animateModule){ %>'ngAnimate',<%} %>
     <% if(uiRouter){ %>'ui.router.state',
     'ui.router',<%} %>

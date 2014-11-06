@@ -14,14 +14,17 @@
     ModuleGenerator = function ModuleGenerator(args, options) {
         yeoman.generators.Base.apply(this, arguments);
 
-        this.uiRouter = this.options['uiRouter'];
-        this.appName  = this.options['appName'];
-        this.name = this.options['name'];
-        this.url = this.name.toLowerCase();
-        
+        this.uiRouter = this.options.uiRouter;
+        this.appName  = this.options.appName;
+        this.name = this.options.name;
+        this.url = (this.name) ? this.name.toLowerCase() : '';
+
         this.sourceRoot(path.join(__dirname, '../../templates/module'));
 
-        this.on('end', function () {});
+        this.on('end', function () {
+            this._addAsDependency();
+
+        });
     };
 
     util.inherits(ModuleGenerator, yeoman.generators.Base);
@@ -91,6 +94,15 @@
         this.template('_dummyCtrl.js', 'src/app/'+this.name+'/'+this.name+'Ctrl.js');
         this.template('_dummyCtrl.spec.js', 'src/app/'+this.name+'/'+this.name+'Ctrl.spec.js');
         this.template('_dummy.tpl.html', 'src/app/'+this.name+'/'+this.name+'.tpl.html');
+    };
+
+
+    ModuleGenerator.prototype._addAsDependency = function generateModuleFiles(){
+        var appJsContent = this.readFileAsString('src/app/app.js');
+        if(appJsContent.match(/\/\/hookForModules[ -w]*[\n\r]/gim)){
+            appJsContent = appJsContent.replace(/(\/\/hookForModules[ -w]*[\n\r])/gim, '$1\''+this.appName + '.' + this.name+'\',\n\r');
+            this.writeFileFromString(appJsContent, 'src/app/app.js');
+        }
     };
 
     module.exports = ModuleGenerator;
