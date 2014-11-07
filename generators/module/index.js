@@ -14,6 +14,7 @@
     ModuleGenerator = function ModuleGenerator(args, options) {
         yeoman.generators.Base.apply(this, arguments);
 
+        this.parsed = false;
         this._parseAppName();
 
         this.uiRouter = this.options.uiRouter;
@@ -48,7 +49,7 @@
     };
 
     ModuleGenerator.prototype.askForAppname = function askForAppname() {
-        if(!this.options['skip-prompt']){
+        if(!this.options['skip-prompt'] && !this.parsed){
             var done = this.async();
             this.prompt([{
                 type: 'input',
@@ -109,15 +110,17 @@
             matches = appJsContent.match(pattern);
             if(matches.length){
                 appName = matches[0].replace(pattern, '$1');
+                this.parsed = true;
                 this.appName = appName;
             }
         }
     };
 
     ModuleGenerator.prototype._addAsDependency = function _addAsDependency(){
-        var appJsContent = this.readFileAsString('src/app/app.js');
-        if(appJsContent.match(/\/\/hookForModules[ -w]*[\n\r]/gim)){
-            appJsContent = appJsContent.replace(/(\/\/hookForModules[ -w]*[\n\r])/gim, '$1    \''+this.appName + '.' + this.name+'\',\n\r');
+        var appJsContent = this.readFileAsString('src/app/app.js'),
+            pattern = /(}\(angular\.module\(\'[a-z09_]+', \[[\n\r])/gim;
+        if(appJsContent.match(pattern)){
+            appJsContent = appJsContent.replace(pattern, '$1    \''+this.appName + '.' + this.name+'\',\n\r');
             this.writeFileFromString(appJsContent, 'src/app/app.js');
         }
     };
