@@ -24,5 +24,4 @@ Getting started
 
 
 ###TODO
-- Dynamic module inclusion in app.js
 - Compile process
