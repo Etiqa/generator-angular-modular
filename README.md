@@ -23,5 +23,16 @@ Getting started
 4. You can run `yo angular-modular:module` to generate a new module inside the app
 
 
+
 ###TODO
 - Compile process
+
+
+References
+----------
+
+- [https://github.com/angular/angular.js/wiki/Best-Practices](https://github.com/angular/angular.js/wiki/Best-Practices)
+- [http://google-styleguide.googlecode.com/svn/trunk/angularjs-google-style.html](http://google-styleguide.googlecode.com/svn/trunk/angularjs-google-style.html)
+- [https://docs.google.com/document/d/1XXMvReO8-Awi1EZXAXS4PzDzdNvV6pGcuaF4Q9821Es/pub](https://docs.google.com/document/d/1XXMvReO8-Awi1EZXAXS4PzDzdNvV6pGcuaF4Q9821Es/pub)
+- [https://github.com/yeoman/generator-angular/issues/109](https://github.com/yeoman/generator-angular/issues/109)
+- [https://github.com/Etiqa/javascript/tree/master/linters](https://github.com/Etiqa/javascript/tree/master/linters)
