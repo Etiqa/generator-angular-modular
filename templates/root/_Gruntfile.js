@@ -134,14 +134,14 @@ module.exports = function(grunt) {
                     {
                         src: '<%%= build_dir %>/index.html',
                         dest: '<%%= build_dir %>/index.html',
-                        cwd: '.',
-                        options: {
-                            process: function(content, srcpath) {
-                                return content.replace('<script src="vendor/angular-mocks/angular-mocks.js"></script>', '');
-                            },
-                        }
+                        cwd: '.'
                     }
-                ]
+                ],
+                options: {
+                    process: function(content, srcpath) {
+                        return content.replace('        <script src="vendor/angular-mocks/angular-mocks.js"></script>\n', '');
+                    }
+                }
             },
             build_app_assets: {
                 files: [
@@ -442,7 +442,7 @@ module.exports = function(grunt) {
          * The Karma configurations.
          */
         karma: {
-        
+
             options: {
                 configFile: '<%%= dev_dir %>/karma-unit.js',
             },
@@ -604,7 +604,7 @@ module.exports = function(grunt) {
     // before watching for changes.
 
     grunt.registerTask('default',['dev','express','watch']);
-    
+
     // The 'build' task gets your app ready to run for development and testing.
     grunt.registerTask('dev', [
         'index:dev', 'less:dev'
