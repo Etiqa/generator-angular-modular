@@ -14,7 +14,7 @@
     Generator = function Generator(args, options) {
 
         yeoman.generators.Base.apply(this, arguments);
-        
+
         this.sourceRoot(path.join(__dirname, '../../templates'));
 
         this.on('end', function () {
