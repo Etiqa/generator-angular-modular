@@ -214,7 +214,7 @@ module.exports = function(grunt) {
                     banner: '<%%= meta.banner %>'
                 },
                 src: [
-                    '<%%= vendor_files.js %>',
+                    '<%%= build_dir %>/vendor/**/*.js',
                     'module.prefix',
                     '<%%= build_dir %>/src/**/*.js',
                     '<%%= html2js.app.dest %>',
@@ -286,7 +286,9 @@ module.exports = function(grunt) {
          */
         less: {
             dev : {
-                '<%%= dev_dir %>/assets/<%%= pkg.name %>-<%%= pkg.version %>.css': '<%%= app_files.less %>'
+                files: {
+                    '<%%= dev_dir %>/assets/<%%= pkg.name %>-<%%= pkg.version %>.css': '<%%= app_files.less %>'
+                }
             },
             build: {
                 files: {
@@ -387,6 +389,7 @@ module.exports = function(grunt) {
             dev: {
                 dir: '<%%= dev_dir %>',
                 src: [
+                    '<%%= dev_dir %>/**/*.css',
                     '<%%= dev_dir %>/**/*.js',
                     '!<%%= dev_dir %>/vendor/**/*',
                     '!<%%= dev_dir %>/**/*.spec.js',

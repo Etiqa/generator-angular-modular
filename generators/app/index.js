@@ -128,6 +128,7 @@
 
     Generator.prototype.scaffoldingDirectories = function scaffoldingDirectories() {
         this.mkdir('src');
+        this.mkdir('src/less');
         this.mkdir('src/app');
         this.mkdir('src/vendor');
         this.mkdir('build');
@@ -141,6 +142,10 @@
 
     Generator.prototype.generateIndexFile = function generateIndexFile() {
         this.template('app/index.html', 'src/index.src.html');
+    };
+
+    Generator.prototype.generateLessFile = function generateLessFile() {
+        this.template('root/_main.less', 'src/less/main.less');
     };
 
     Generator.prototype.generateGruntFile = function generateGruntFile(){

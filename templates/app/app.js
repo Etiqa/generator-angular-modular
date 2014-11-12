@@ -17,7 +17,6 @@
             // Function declarations
 
             // ...
-
         }
 
         // Use prototype and controller instead $scope
