@@ -193,6 +193,20 @@ module.exports = function(grunt) {
                         expand: true
                     }
                 ]
+            },
+            compile_html :{
+                files: [
+                    {
+                        src: '<%%= compile_dir %>/index.html',
+                        dest: '<%%= compile_dir %>/index.html',
+                        cwd: '.'
+                    }
+                ],
+                options: {
+                    process: function(content, srcpath) {
+                        return content.replace(/<!-- bower:js -->[\w<>\r\n\s='"\/\.-]*<!-- endbower -->/gi, '');
+                    }
+                }
             }
         },
 
@@ -214,7 +228,8 @@ module.exports = function(grunt) {
                     banner: '<%%= meta.banner %>'
                 },
                 src: [
-                    '<%%= build_dir %>/vendor/**/*.js',
+                    // we use this function to concat the vendor files in the right order
+                    getVendorRelative('<%%= build_dir %>'),
                     'module.prefix',
                     '<%%= build_dir %>/src/**/*.js',
                     '<%%= html2js.app.dest %>',
@@ -368,7 +383,7 @@ module.exports = function(grunt) {
                     base: 'src/app'
                 },
                 src: [ '<%%= app_files.appTemplates %>' ],
-                dest: '<%%= build_dir %>/templates-app.js'
+                dest: '<%%= dev_dir %>/templates-app.js'
             },
 
             // These are the templates from 'src/common'.
@@ -377,7 +392,7 @@ module.exports = function(grunt) {
                     base: 'src/common'
                 },
                 src: [ '<%%= app_files.commonTemplates %>' ],
-                dest: '<%%= build_dir %>/templates-common.js'
+                dest: '<%%= dev_dir %>/templates-common.js'
             }
         },
 
@@ -549,13 +564,13 @@ module.exports = function(grunt) {
             /**
              * When our templates change, we only rewrite the template cache.
              */
-            /*tpls: {
+            tpls: {
                 files: [
                     '<%%= app_files.appTemplates %>',
                     '<%%= app_files.commonTemplates %>'
                 ],
                 tasks: [ 'html2js' ]
-            },*/
+            },
 
             /**
              * When the CSS files change, we need to compile and minify them.
@@ -610,7 +625,7 @@ module.exports = function(grunt) {
 
     // The 'build' task gets your app ready to run for development and testing.
     grunt.registerTask('dev', [
-        'index:dev', 'less:dev'
+        'html2js', 'index:dev', 'less:dev'
     ]);
 
     grunt.registerTask('test',[
@@ -618,7 +633,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('build',[
-        'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
+        'clean', 'jshint', 'coffeelint', 'coffee', 'less:build',
         'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
         'copy:build_appjs', 'copy:build_vendorjs', 'ngAnnotate:build', 'index:build','copy:build_html', 'karmaconfig', 'karma:continuous',
     ]);
@@ -626,7 +641,7 @@ module.exports = function(grunt) {
     // The 'compile' task gets your app ready for deployment by concatenating and minifying your code.
     // Note - compile builds off of the build dir (look at concat:compile_js), so run grunt build before grunt compile
     grunt.registerTask('compile', [
-        'less:compile', 'copy:compile_assets', 'concat:compile_js', 'uglify', 'index:compile'
+        'less:compile', 'copy:compile_assets', 'concat:compile_js', 'uglify', 'index:compile', 'copy:compile_html'
     ]);
 
     // A utility function to get all app JavaScript sources.
@@ -641,6 +656,14 @@ module.exports = function(grunt) {
         return files.filter( function (file) {
             return file.match(/\.css$/);
         });
+    }
+
+    // A utility function to get fileConfig.vendor_files relative to src or build directory
+    function getVendorRelative(dir){
+        var vendors = fileConfig.vendor_files.js.map(function(el){
+            return dir + '/' + el;
+        });
+        return vendors;
     }
 
     // The index.html template includes the stylesheet and javascript sources
